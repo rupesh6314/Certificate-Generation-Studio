@@ -6,7 +6,7 @@ A full-stack document generation and verification platform built with React, Nod
 
 ## 🛠️ Bug Fixes & Verification Guide
 
-This section documents the **3 exact bug fixes (Bugs #5, #6, and #7)**, how they were resolved, and the exact commands and outputs to verify each fix.
+This section documents the **3 exact bug fixes (Bugs #5, #6, and #7)**, how they Ire resolved, and the exact commands and outputs to verify each fix.
 
 ---
 
@@ -16,15 +16,15 @@ This section documents the **3 exact bug fixes (Bugs #5, #6, and #7)**, how they
 * `server/package.json` designates `"type": "module"`, but `server/services/emailService.js` was written using CommonJS syntax (`require` / `module.exports`).
 * `nodemailer` was imported in `emailService.js` but was not listed in `package.json` dependencies, resulting in a runtime `MODULE_NOT_FOUND` crash.
 
-#### ✅ How We Fixed It:
+#### ✅ How I Fixed It:
 1. Added `"nodemailer": "^6.9.13"` to `server/package.json` dependencies and installed it.
 2. Converted `server/services/emailService.js` to standard ES module syntax (`import nodemailer from 'nodemailer'` and `export const sendAcceptanceEmail = ...`).
 3. Added safe environment checks for `GMAIL_USER` and `GMAIL_APP_PASSWORD` with graceful fallback logging so missing SMTP credentials do not crash local development.
 
 #### 🧪 How to Test:
-Open PowerShell, navigate to the project directory, and test the email service:
+Open PoIrShell, navigate to the project directory, and test the email service:
 
-```powershell
+```poIrshell
 cd C:\Users\rupes\Downloads\Certificate-Generation-Studio\Certificate-Generation-Studio-main
 node -e "import { sendAcceptanceEmail } from './server/services/emailService.js'; sendAcceptanceEmail('test@example.com', 'Test User').then(console.log);"
 ```
@@ -44,17 +44,17 @@ node -e "import { sendAcceptanceEmail } from './server/services/emailService.js'
 * It called non-existent database functions (`db.createUser`, `db.findUserByEmail`).
 * `db.updateSopAcceptance` in `db.js` required a numeric `userId`, but `sopRoutes.js` was passing the user's `email`.
 
-#### ✅ How We Fixed It:
+#### ✅ How I Fixed It:
 1. Converted `server/routes/sopRoutes.js` to ES Module syntax (`import express from 'express'`, `export default router`).
 2. Linked the router to the correct helper functions in `server/db.js` (`createSopUser`, `getSopUserByEmail`, `updateSopAcceptance`).
 3. Integrated `sendAcceptanceEmail()` to trigger upon SOP acceptance.
 4. Mounted `app.use('/api/sop', sopRoutes)` in `server/server.js`.
 
 #### 🧪 How to Test:
-Make sure your server is running in one terminal (`cd server` then `npm start`), then open a second PowerShell terminal and run:
+Make sure your server is running in one terminal (`cd server` then `npm start`), then open a second PoIrShell terminal and run:
 
 **Step A: Create a Test User**
-```powershell
+```poIrshell
 Invoke-RestMethod -Uri "http://localhost:5000/api/sop/admin/create-user" -Method Post -ContentType "application/json" -Body '{"name":"Alice Intern","email":"alice@example.com","password":"secretpassword"}'
 ```
 **Expected Output:**
@@ -71,7 +71,7 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/admin/create-user" -Method
 ```
 
 **Step B: Test User Login**
-```powershell
+```poIrshell
 Invoke-RestMethod -Uri "http://localhost:5000/api/sop/login" -Method Post -ContentType "application/json" -Body '{"email":"alice@example.com","password":"secretpassword"}'
 ```
 **Expected Output:**
@@ -89,7 +89,7 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/login" -Method Post -Conte
 ```
 
 **Step C: Accept SOP**
-```powershell
+```poIrshell
 Invoke-RestMethod -Uri "http://localhost:5000/api/sop/accept" -Method Post -ContentType "application/json" -Body '{"email":"alice@example.com"}'
 ```
 **Expected Output:**
@@ -112,7 +112,7 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/accept" -Method Post -Cont
   ```
 * When inputting strings such as `"3 Months"` or `"6 Months"`, `Number("3 Months")` evaluated to `NaN`. This collapsed the calculation to `0`, causing the certificate PDF to print `0` (or `0 days`) instead of the actual duration.
 
-#### ✅ How We Fixed It:
+#### ✅ How I Fixed It:
 * Implemented a resilient regex-based duration parser in `server/pdfGenerator.js`:
   ```javascript
   // ✅ Robust parser:
@@ -133,9 +133,9 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/accept" -Method Post -Cont
   ```
 
 #### 🧪 How to Test:
-Run the duration parser test in PowerShell:
+Run the duration parser test in PoIrShell:
 
-```powershell
+```poIrshell
 cd C:\Users\rupes\Downloads\Certificate-Generation-Studio\Certificate-Generation-Studio-main
 node -e "const testDuration = (d) => { const raw = String(d).trim(); if (/days/i.test(raw)) return raw; const m = raw.match(/\d+(\.\d+)?/); return m ? (Math.round(parseFloat(m[0]) * 30) + ' Days') : raw; }; console.log('3 Months ->', testDuration('3 Months')); console.log('6 Months ->', testDuration('6 Months')); console.log('90 Days ->', testDuration('90 Days'));"
 ```
@@ -152,7 +152,7 @@ node -e "const testDuration = (d) => { const raw = String(d).trim(); if (/days/i
 ## 🚀 How to Run the Project
 
 ### 1. Backend Server
-```powershell
+```poIrshell
 cd server
 npm install
 npm start
@@ -160,7 +160,7 @@ npm start
 * **API URL:** `http://localhost:5000`
 
 ### 2. Frontend Client
-```powershell
+```poIrshell
 cd client
 npm install
 npm run dev
