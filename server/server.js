@@ -19,11 +19,13 @@ import {
   searchRecords,
   getAuditLogs,
   checkDuplicate,
-  logAction
+  logAction,
+  get
 } from './db.js';
 import { generatePDF } from './pdfGenerator.js';
 import { runBackup, initBackupService } from './backupService.js';
 import cloudinaryService from './services/cloudinaryService.js';
+import sopRoutes from './routes/sopRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +36,7 @@ const PORT = process.env.PORT || 5000;
 // Enable CORS and JSON parsing
 app.use(cors());
 app.use(express.json());
+app.use('/api/sop', sopRoutes);
 
 // Set up directory structure
 const projectRootDir = path.resolve(__dirname, '..');

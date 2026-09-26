@@ -129,9 +129,20 @@ export const generatePDF = async (data, docType, isPreview = false) => {
     companyPhone: settings.company_phone,
   };
 
-  // Convert duration from months to days exclusively for Certificate
+  // Format/convert duration for Certificate (e.g. '3 Months' or '3' -> '90 Days')
   if (docType === 'certificate' && values.duration) {
-    values.duration = (Number(values.duration) || 0) * 30;
+    const rawDuration = String(values.duration).trim();
+    if (/days/i.test(rawDuration)) {
+      values.duration = rawDuration;
+    } else {
+      const match = rawDuration.match(/\d+(\.\d+)?/);
+      if (match) {
+        const months = parseFloat(match[0]);
+        values.duration = `${Math.round(months * 30)} Days`;
+      } else {
+        values.duration = rawDuration;
+      }
+    }
   }
 
   // Ensure formatted Intern ID is ready

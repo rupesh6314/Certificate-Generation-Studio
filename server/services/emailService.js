@@ -1,7 +1,12 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 
-const sendAcceptanceEmail = async (userEmail, fullName) => {
+export const sendAcceptanceEmail = async (userEmail, fullName) => {
   try {
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      console.log(`[EmailService] Skipping SMTP delivery to ${userEmail} (GMAIL_USER / GMAIL_APP_PASSWORD not set in environment)`);
+      return { response: 'Skipped - no SMTP credentials configured' };
+    }
+
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -27,6 +32,6 @@ const sendAcceptanceEmail = async (userEmail, fullName) => {
   }
 };
 
-module.exports = {
+export default {
   sendAcceptanceEmail,
 };
