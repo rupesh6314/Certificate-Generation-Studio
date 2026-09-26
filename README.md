@@ -6,11 +6,11 @@ A full-stack document generation and verification platform built with React, Nod
 
 ## 🛠️ Bug Fixes & Verification Guide
 
-This section documents the **3 exact bug fixes (Bugs #5, #6, and #7)**, how they Ire resolved, and the exact commands and outputs to verify each fix.
+This section documents the **3 exact bug fixes how they were resolved, and the exact commands and outputs to verify each fix.
 
 ---
 
-### 1. Fix #1: Missing `nodemailer` Dependency & Email Service Refactor (Bug #5)
+### 1. Fix #1: Missing `nodemailer` Dependency & Email Service Refactor
 
 #### ❌ The Problem:
 * `server/package.json` designates `"type": "module"`, but `server/services/emailService.js` was written using CommonJS syntax (`require` / `module.exports`).
@@ -22,9 +22,9 @@ This section documents the **3 exact bug fixes (Bugs #5, #6, and #7)**, how they
 3. Added safe environment checks for `GMAIL_USER` and `GMAIL_APP_PASSWORD` with graceful fallback logging so missing SMTP credentials do not crash local development.
 
 #### 🧪 How to Test:
-Open PoIrShell, navigate to the project directory, and test the email service:
+Open PowerShell, navigate to the project directory, and test the email service:
 
-```poIrshell
+```powershell
 cd C:\Users\rupes\Downloads\Certificate-Generation-Studio\Certificate-Generation-Studio-main
 node -e "import { sendAcceptanceEmail } from './server/services/emailService.js'; sendAcceptanceEmail('test@example.com', 'Test User').then(console.log);"
 ```
@@ -37,7 +37,7 @@ node -e "import { sendAcceptanceEmail } from './server/services/emailService.js'
 
 ---
 
-### 2. Fix #2: Broken & Unmounted SOP Routes Integration (Bug #6)
+### 2. Fix #2: Broken & Unmounted SOP Routes Integration
 
 #### ❌ The Problem:
 * `server/routes/sopRoutes.js` was written in CommonJS and was never mounted in `server.js` (causing all `/api/sop/*` requests to return `404 Not Found`).
@@ -51,10 +51,10 @@ node -e "import { sendAcceptanceEmail } from './server/services/emailService.js'
 4. Mounted `app.use('/api/sop', sopRoutes)` in `server/server.js`.
 
 #### 🧪 How to Test:
-Make sure your server is running in one terminal (`cd server` then `npm start`), then open a second PoIrShell terminal and run:
+Make sure your server is running in one terminal (`cd server` then `npm start`), then open a second PowerShell terminal and run:
 
 **Step A: Create a Test User**
-```poIrshell
+```powershell
 Invoke-RestMethod -Uri "http://localhost:5000/api/sop/admin/create-user" -Method Post -ContentType "application/json" -Body '{"name":"Alice Intern","email":"alice@example.com","password":"secretpassword"}'
 ```
 **Expected Output:**
@@ -71,7 +71,7 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/admin/create-user" -Method
 ```
 
 **Step B: Test User Login**
-```poIrshell
+```powershell
 Invoke-RestMethod -Uri "http://localhost:5000/api/sop/login" -Method Post -ContentType "application/json" -Body '{"email":"alice@example.com","password":"secretpassword"}'
 ```
 **Expected Output:**
@@ -89,7 +89,7 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/login" -Method Post -Conte
 ```
 
 **Step C: Accept SOP**
-```poIrshell
+```powershell
 Invoke-RestMethod -Uri "http://localhost:5000/api/sop/accept" -Method Post -ContentType "application/json" -Body '{"email":"alice@example.com"}'
 ```
 **Expected Output:**
@@ -102,7 +102,7 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/accept" -Method Post -Cont
 
 ---
 
-### 3. Fix #3: Certificate Duration `NaN` Calculation Bug (Bug #7)
+### 3. Fix #3: Certificate Duration `NaN` Calculation Bug 
 
 #### ❌ The Problem:
 * In `server/pdfGenerator.js`, certificate duration was calculated as:
@@ -133,9 +133,9 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/sop/accept" -Method Post -Cont
   ```
 
 #### 🧪 How to Test:
-Run the duration parser test in PoIrShell:
+Run the duration parser test in PowerShell:
 
-```poIrshell
+```powershell
 cd C:\Users\rupes\Downloads\Certificate-Generation-Studio\Certificate-Generation-Studio-main
 node -e "const testDuration = (d) => { const raw = String(d).trim(); if (/days/i.test(raw)) return raw; const m = raw.match(/\d+(\.\d+)?/); return m ? (Math.round(parseFloat(m[0]) * 30) + ' Days') : raw; }; console.log('3 Months ->', testDuration('3 Months')); console.log('6 Months ->', testDuration('6 Months')); console.log('90 Days ->', testDuration('90 Days'));"
 ```
@@ -152,7 +152,7 @@ node -e "const testDuration = (d) => { const raw = String(d).trim(); if (/days/i
 ## 🚀 How to Run the Project
 
 ### 1. Backend Server
-```poIrshell
+```powershell
 cd server
 npm install
 npm start
@@ -160,7 +160,7 @@ npm start
 * **API URL:** `http://localhost:5000`
 
 ### 2. Frontend Client
-```poIrshell
+```powershell
 cd client
 npm install
 npm run dev
